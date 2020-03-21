@@ -6,21 +6,13 @@
       collapsible
       v-model="collapsed"
     >
-      <div class="logo">
+      <div class="logo" @click="()=> collapsed = !collapsed">
         <a-avatar style="backgroundColor:#87d068" icon="user" />
       </div>
-      <a-menu theme="dark" mode="inline" :defaultSelectedKeys="['1']">
-        <a-menu-item key="1">
-          <a-icon type="user" />
-          <span>アカウント</span>
-        </a-menu-item>
-        <a-menu-item key="2">
-          <a-icon type="video-camera" />
-          <span>教室</span>
-        </a-menu-item>
-        <a-menu-item key="3">
-          <a-icon type="upload" />
-          <span>提出</span>
+      <a-menu theme="dark" mode="inline" :defaultSelectedKeys="[0]">
+        <a-menu-item v-for="(item, index) in menus" :key="index" @click="handleClick">
+          <a-icon :type="item.icon" />
+          <span>{{item.title}}</span>
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
@@ -44,8 +36,30 @@
 export default {
   data() {
     return {
-      collapsed: false
+      collapsed: false,
+      menus: [
+        {
+          title: "アカウント",
+          icon: "user",
+          path: "/account"
+        },
+        {
+          title: "教室",
+          icon: "video-camera",
+          path: "/classroom"
+        },
+        {
+          title: "提出",
+          icon: "upload",
+          path: "/submit"
+        }
+      ]
     };
+  },
+  methods: {
+    handleClick(item) {
+      this.$router.push(this.menus[item.key].path);
+    }
   }
 };
 </script>

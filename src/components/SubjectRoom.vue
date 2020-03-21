@@ -1,15 +1,19 @@
 <template>
   <div class="hello">
     <div>
-      <a-row class="test1">
+      <a-row>
         <a-col :span="18">
           <a-card hoverable title="経済学入門 [sub12234]" class="monitor">
             <div slot="extra">
-              <a-avatar style="margin-right: 1rem" shape="square" size="large" icon="user" />山田先生
+              <a-statistic title="オンライン" :value="129">
+                <template v-slot:suffix>
+                  <a-icon type="user" />
+                </template>
+              </a-statistic>
             </div>
-            <div @click="currentPage ++">
+            <div @click="currentPage ++" style="text-align: center;">
               <pdf
-                style="height: 100px"
+                style="border: 1px solid #e8e8e8; text-align: center;"
                 src="http://localhost:3000/static/test.pdf"
                 :page="currentPage % pageCount"
                 @num-pages="pageCount = $event"
@@ -35,15 +39,7 @@
         </a-col>
       </a-row>
       <a-row>
-        <a-col :span="6">
-          <a-statistic title="オンライン" :value="129">
-            <template v-slot:suffix>
-              <a-badge dot>
-                <a-icon type="user" />
-              </a-badge>
-            </template>
-          </a-statistic>
-        </a-col>
+        <a-col :span="6"></a-col>
       </a-row>
     </div>
   </div>
@@ -86,6 +82,7 @@ export default {
       div.scrollTop = div.scrollHeight - 10;
     },
     sendMessage(value) {
+      if (value == "") return;
       this.messages.push({
         title: "ABC1",
         msg: value
@@ -99,7 +96,6 @@ export default {
 <style>
 .monitor {
   overflow: scroll;
-  background-color: #333;
   height: 60vh;
 }
 .messages {
@@ -112,6 +108,6 @@ export default {
 }
 .message-input {
   height: 20px;
-  margin: 20px 1rem;
+  margin: 0.5rem 1rem;
 }
 </style>
