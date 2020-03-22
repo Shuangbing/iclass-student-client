@@ -16,6 +16,11 @@ const routes = [
       },
       {
         path: '/classroom',
+        component: () => import('../components/SubjectList.vue')
+      },
+      {
+        path: '/classroom/:id',
+        props: true,
         component: () => import('../components/SubjectRoom.vue')
       },
       {

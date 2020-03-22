@@ -1,13 +1,11 @@
 <template>
   <a-layout id="components-layout-demo-custom-trigger">
-    <a-layout-sider
-      style="-webkit-app-region: drag; height: 100vh"
-      :trigger="null"
-      collapsible
-      v-model="collapsed"
-    >
-      <div class="logo" @click="()=> collapsed = !collapsed">
-        <a-avatar style="backgroundColor:#87d068" icon="user" />
+    <a-layout-sider id="sidebar" v-model="collapsed">
+      <div class="logo">
+        <a-badge count="20" :numberStyle="{backgroundColor: '#52c41a'} ">
+          <a-avatar shape="square" icon="user" />
+        </a-badge>
+        <span class="username">山田デモ</span>
       </div>
       <a-menu theme="dark" mode="inline" :defaultSelectedKeys="[0]">
         <a-menu-item v-for="(item, index) in menus" :key="index" @click="handleClick">
@@ -16,13 +14,9 @@
         </a-menu-item>
       </a-menu>
     </a-layout-sider>
-    <a-layout>
+    <a-layout :style="{ marginLeft: '200px', minHeight: '100vh' }">
       <a-layout-header style="background: #fff; padding: 0; -webkit-app-region: drag;">
-        <a-icon
-          class="trigger"
-          :type="collapsed ? 'menu-unfold' : 'menu-fold'"
-          @click="()=> collapsed = !collapsed"
-        />
+        <a-icon class="trigger" :type="collapsed ? 'menu-unfold' : 'menu-fold'" />
       </a-layout-header>
       <a-layout-content
         :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }"
@@ -67,6 +61,15 @@ export default {
 body {
   background-color: #f0f2f5;
 }
+
+#sidebar {
+  overflow: auto;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  -webkit-app-region: drag;
+  -webkit-user-select: none;
+}
 #components-layout-demo-custom-trigger .trigger {
   font-size: 18px;
   line-height: 64px;
@@ -79,10 +82,17 @@ body {
   color: #1890ff;
 }
 
-#components-layout-demo-custom-trigger .logo {
+#sidebar .logo {
   font-size: 1rem;
-  color: #fff;
-  margin: 2rem 25px;
+  margin-top: 50px;
+  margin-bottom: 20px;
+  margin-left: 20px;
   height: 32px;
+}
+#sidebar .username {
+  width: 100px;
+  color: white;
+  margin-left: 1rem;
+  font-size: 1rem;
 }
 </style>

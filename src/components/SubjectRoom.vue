@@ -2,7 +2,7 @@
   <div class="hello">
     <div>
       <a-row>
-        <a-col :span="18">
+        <a-col :span="12">
           <a-card hoverable title="経済学入門 [sub12234]" class="monitor">
             <div slot="extra">
               <a-statistic title="オンライン" :value="129">
@@ -13,7 +13,7 @@
             </div>
             <div @click="currentPage ++" style="text-align: center;">
               <pdf
-                style="border: 1px solid #e8e8e8; text-align: center;"
+                style="text-align: center;"
                 src="http://localhost:3000/static/test.pdf"
                 :page="currentPage % pageCount"
                 @num-pages="pageCount = $event"
@@ -22,7 +22,7 @@
             </div>
           </a-card>
         </a-col>
-        <a-col :span="6">
+        <a-col :span="12">
           <div class="messages" id="messages">
             <a-list itemLayout="horizontal" :dataSource="messages">
               <a-list-item slot="renderItem" slot-scope="item">
@@ -107,7 +107,7 @@ export default {
   border-radius: 4px;
 }
 .message-input {
-  height: 20px;
+  height: 5vh;
   margin: 0.5rem 1rem;
 }
 </style>
