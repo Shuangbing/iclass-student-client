@@ -1,0 +1,8 @@
+{
+    "productName": "iClass Student",
+    "appId": "com.lifebyte.iclass.student",
+    "mac": {
+        "target": "default",
+        "icon": "./src/assets/icon-mac.png"
+    }
+}

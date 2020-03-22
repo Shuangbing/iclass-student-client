@@ -5,7 +5,7 @@
         <a-badge count="20" :numberStyle="{backgroundColor: '#52c41a'} ">
           <a-avatar shape="square" icon="user" />
         </a-badge>
-        <span class="username">山田デモ</span>
+        <span class="username">{{user.lastname}} {{user.fristname}}</span>
       </div>
       <a-menu theme="dark" mode="inline" :defaultSelectedKeys="[0]">
         <a-menu-item v-for="(item, index) in menus" :key="index" @click="handleClick">
@@ -21,7 +21,7 @@
       <a-layout-content
         :style="{ margin: '24px 16px', padding: '24px', background: '#fff', minHeight: '280px' }"
       >
-        <router-view></router-view>
+        <router-view />
       </a-layout-content>
     </a-layout>
   </a-layout>
@@ -30,6 +30,7 @@
 export default {
   data() {
     return {
+      user: this.$store.state.user,
       collapsed: false,
       menus: [
         {
@@ -58,6 +59,16 @@ export default {
 };
 </script>
 <style>
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s;
+}
+
+.v-enter,
+.v-leave-to {
+  opacity: 0;
+}
+
 body {
   background-color: #f0f2f5;
 }
@@ -70,6 +81,7 @@ body {
   -webkit-app-region: drag;
   -webkit-user-select: none;
 }
+
 #components-layout-demo-custom-trigger .trigger {
   font-size: 18px;
   line-height: 64px;

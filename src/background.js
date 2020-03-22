@@ -6,7 +6,7 @@ import {
   /* installVueDevtools */
 } from 'vue-cli-plugin-electron-builder/lib'
 const isDevelopment = process.env.NODE_ENV !== 'production'
-
+app.allowRendererProcessReuse = true
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let win
@@ -19,7 +19,7 @@ function createWindow() {
   win = new BrowserWindow({
     width: 1280,
     height: 800,
-    minWidth: 800,
+    minWidth: 1000,
     minHeight: 600,
     center: true,
     titleBarStyle: 'hidden',
