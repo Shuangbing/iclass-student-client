@@ -3,6 +3,6 @@
     "appId": "com.lifebyte.iclass.student",
     "mac": {
         "target": "default",
-        "icon": "./src/assets/icon-mac.png"
+        "icon": "./src/assets/icon_student.png"
     }
 }

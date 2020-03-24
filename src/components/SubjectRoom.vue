@@ -1,11 +1,11 @@
 <template>
   <div class="hello">
     <div>
-      <a-row :gutter="[16,24]">
+      <a-row>
         <a-col :span="16">
           <a-card hoverable title="経済学入門 [sub12234]" class="monitor">
             <div slot="extra">
-              <a-statistic title="オンライン" :value="129">
+              <a-statistic title="オンライン" :value="serverInfo.online">
                 <template v-slot:suffix>
                   <a-icon type="user" />
                 </template>
@@ -14,7 +14,7 @@
             <div @click="currentPage ++" style="text-align: center;">
               <pdf
                 style="text-align: center; max-width: 50vw"
-                src="http://localhost:3000/static/test.pdf"
+                src="https://staging-chat-iclass-edu.herokuapp.com/static/test.pdf"
                 :page="currentPage % pageCount"
                 @num-pages="pageCount = $event"
                 @page-loaded="currentPage = $event"
@@ -30,13 +30,13 @@
                 :dataSource="comments"
                 :header="`メッセージ`"
                 itemLayout="horizontal"
-                :locale="test"
+                :loading="!chatConnect"
               >
                 <a-list-item slot="renderItem" slot-scope="item">
                   <a-comment
                     :author="item.author"
                     :content="item.content"
-                    :datetime="item.datetime"
+                    :datetime="moment(item.timestamp).format('HH:mm:ss')"
                   >
                     <a-avatar slot="avatar">{{item.author}}</a-avatar>
                   </a-comment>
@@ -78,15 +78,8 @@
           </div>
         </a-col>
       </a-row>
-      <a-row :gutter="[16,24]">
-        <a-col :span="6">
-          <a-statistic-countdown
-            title="経過時間"
-            :value="Date.now() + 1000 * 60 * 60 * 24 * 2 + 1000 * 30"
-            format="HH:mm:ss"
-            style="margin-top: 20px; margin-right: 50px"
-          />
-        </a-col>
+      <a-row>
+        <a-col :span="6"></a-col>
       </a-row>
     </div>
   </div>
@@ -94,6 +87,7 @@
 
 <script>
 import pdf from "vue-pdf";
+import io from "socket.io-client";
 import moment from "moment";
 
 export default {
@@ -104,42 +98,61 @@ export default {
   },
   data() {
     return {
+      serverInfo: {},
+      freshTimer: "",
+      chatConnect: false,
       user: this.$store.state.user,
       comments: [],
       submitting: false,
       value: "",
-      moment,
       currentPage: 1,
       pageCount: 0,
-      test: {
-        emptyText: "暂无数据"
-      }
+      socket: io("https://staging-chat-iclass-edu.herokuapp.com/"),
+      moment
     };
   },
   methods: {
-    handleSubmit() {
-      if (!this.value) {
-        return;
-      }
+    async handleSubmit() {
+      if (!this.value) return;
 
       this.submitting = true;
+      const messageVal = {
+        author: this.user.lastname,
+        content: this.value,
+        timestamp: Date.now()
+      };
 
-      setTimeout(() => {
-        this.submitting = false;
-        this.comments = [
-          {
-            author: this.user.lastname,
-            content: this.value,
-            datetime: moment().fromNow()
-          },
-          ...this.comments
-        ];
-        this.value = "";
-      }, 1000);
+      await this.socket.emit("sendMessage", messageVal);
+      this.value = "";
+      this.comments.unshift(messageVal);
+      this.submitting = false;
     },
     handleChange(e) {
       this.value = e.target.value;
+    },
+    refreshServerInfo() {
+      this.socket.emit("getServerInfo");
     }
+  },
+  mounted() {
+    this.freshTimer = setInterval(this.refreshServerInfo, 5000);
+    this.socket.on("connect", () => {
+      this.chatConnect = true;
+    });
+    this.socket.on("reciveMessage", data => {
+      this.comments.unshift(data);
+      this.$sound("notify");
+    });
+    this.socket.on("reciveServerInfo", data => {
+      this.serverInfo = data;
+    });
+    this.socket.on("disconnect", () => {
+      this.chatConnect = false;
+    });
+  },
+  beforeDestroy() {
+    this.socket.disconnect();
+    clearInterval(this.freshTimer);
   }
 };
 </script>
@@ -155,8 +168,8 @@ export default {
 }
 .messages {
   margin: 0 1rem;
-  height: 60vh;
-  overflow: scroll;
+  height: 40vh;
+  overflow: auto;
 }
 .messages #message-list {
   overflow: hidden;

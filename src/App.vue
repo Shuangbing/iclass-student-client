@@ -5,7 +5,7 @@
         <a-badge count="20" :numberStyle="{backgroundColor: '#52c41a'} ">
           <a-avatar shape="square" icon="user" />
         </a-badge>
-        <span class="username">{{user.lastname}} {{user.fristname}}</span>
+        <span class="username">{{$store.state.user.lastname}} {{$store.state.user.firstname}}</span>
       </div>
       <a-menu theme="dark" mode="inline" :defaultSelectedKeys="[0]">
         <a-menu-item v-for="(item, index) in menus" :key="index" @click="handleClick">
@@ -28,6 +28,20 @@
 </template>
 <script>
 export default {
+  created() {
+    if (localStorage.getItem("store")) {
+      this.$store.replaceState(
+        Object.assign(
+          {},
+          this.$store.state,
+          JSON.parse(localStorage.getItem("store"))
+        )
+      );
+    }
+    window.addEventListener("beforeunload", () => {
+      localStorage.setItem("store", JSON.stringify(this.$store.state));
+    });
+  },
   data() {
     return {
       user: this.$store.state.user,

@@ -3,9 +3,8 @@
     <a-row>
       <div style="height: 70vh; overflow: auto">
         <a-input-search
-          placeholder="input search text"
+          placeholder="キーワードで教室を検索してください"
           style="width: 20rem; margin-bottom: 1rem;"
-          @search="onSearch"
         />
         <a-spin :spinning="false" tip="読み取り中">
           <a-list :grid="{ gutter: 16, column: 4 }" :dataSource="data">
@@ -32,19 +31,10 @@
 <script>
 const data = [
   {
-    title: "Title 1"
+    title: "経済学入門"
   },
   {
     title: "Title 2"
-  },
-  {
-    title: "Title 3"
-  },
-  {
-    title: "Title 4"
-  },
-  {
-    title: "Title 1"
   }
 ];
 export default {

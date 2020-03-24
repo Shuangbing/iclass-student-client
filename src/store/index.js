@@ -8,10 +8,14 @@ export default new Vuex.Store({
     user: {
       username: "yamada@uni.edu",
       lastname: "山田",
-      fristname: "デモ"
+      firstname: "デモ"
     }
   },
   mutations: {
+    setUser(state, user) {
+      state.user.lastname = user.lastname;
+      state.user.firstname = user.firstname;
+    }
   },
   actions: {
   },
